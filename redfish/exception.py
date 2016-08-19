@@ -12,11 +12,20 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import pbr.version
 
-import redfish.server
-import redfish.types
+class RedfishException(Exception):
+    """Base class for redfish exceptions"""
+    def __init__(self, message=None, **kwargs):
+        self.kwargs = kwargs
+
+        if not message:
+            try:
+                message = self.message % kwargs
+            except Excetion as e:
+                LOG.exception('Error in string format operation')
+                message = self.message
+        super(RedfishException, self).__init__(message)
 
 
-__version__ = pbr.version.VersionInfo(
-    'redfish').version_string()
+class ObjectLoadException(RedfishException):
+    pass
